@@ -36,6 +36,10 @@ export function createApp() {
   app.use(morgan(env.NODE_ENV === 'production' ? 'combined' : 'dev'));
   app.use('/api', apiRateLimiter);
 
+  app.get('/', (_req, res) => {
+    res.redirect('/api-docs');
+  });
+
   app.get('/health', async (_req, res, next) => {
     try {
       await prisma.$queryRaw`SELECT 1`;
