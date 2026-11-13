@@ -18,7 +18,7 @@ const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
   console.error('Invalid environment configuration:', parsed.error.flatten().fieldErrors);
-  process.exit(1);
+  throw new Error('Invalid environment configuration');
 }
 
 export const env = {
@@ -30,4 +30,3 @@ export const env = {
           .map((origin) => origin.trim())
           .filter(Boolean),
 };
-
