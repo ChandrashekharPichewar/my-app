@@ -11,6 +11,7 @@ import { errorHandler, notFoundHandler } from './middlewares/error.middleware';
 import { apiRateLimiter } from './middlewares/rate-limit.middleware';
 import { authRouter } from './modules/auth/auth.routes';
 import { deviceRouter } from './modules/device/device.routes';
+import { supportRouter } from './modules/support/support.routes';
 
 export function createApp() {
   const app = express();
@@ -60,6 +61,7 @@ export function createApp() {
 
   app.use('/api/auth', authRouter);
   app.use('/api/deviceId', deviceRouter);
+  app.use('/api/support', supportRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

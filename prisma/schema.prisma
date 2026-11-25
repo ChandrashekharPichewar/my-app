@@ -17,6 +17,7 @@ model User {
   updatedAt     DateTime       @updatedAt @map("updated_at")
   refreshTokens RefreshToken[]
   devices       Device[]
+  issueReports  IssueReport[]
 
   @@index([firstname])
   @@map("users")
@@ -44,5 +45,23 @@ model Device {
 
   @@index([userId])
   @@map("devices")
+}
+
+model IssueReport {
+  id               String   @id @default(uuid())
+  ticketCode       String   @unique @map("ticket_code") @db.VarChar(20)
+  userId           String   @map("user_id")
+  issueType        String   @map("issue_type") @db.VarChar(100)
+  urgency          String   @db.VarChar(100)
+  briefDescription String   @map("brief_description") @db.VarChar(255)
+  details          String
+  deviceId         String?  @map("device_id") @db.VarChar(50)
+  status           String   @default("OPEN") @db.VarChar(20)
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("issue_reports")
 }
 

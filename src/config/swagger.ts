@@ -16,6 +16,7 @@ export const swaggerSpec = {
     { name: 'Health', description: 'Service and database health checks' },
     { name: 'Auth', description: 'User registration, login, and token refresh' },
     { name: 'Device', description: 'Device ID registration' },
+    { name: 'Support', description: 'Issue reporting and user support tickets' },
   ],
   components: {
     securitySchemes: {
@@ -79,6 +80,75 @@ export const swaggerSpec = {
         properties: {
           message: { type: 'string', example: 'Successfully saved' },
           deviceID: { type: 'string', example: 'device-ios-9f8c2a1b' },
+        },
+      },
+      ReportIssueRequest: {
+        type: 'object',
+        required: ['issueType', 'urgency', 'briefDescription', 'details'],
+        properties: {
+          issueType: { type: 'string', example: 'Ride Booking / Cancellation' },
+          urgency: { type: 'string', example: 'High — Impacts an upcoming or recent ride' },
+          briefDescription: {
+            type: 'string',
+            example: 'Driver cancelled ride 5 minutes before pickup',
+          },
+          details: {
+            type: 'string',
+            example:
+              'Booked ride ride-101 for 08:45 AM from Gachibowli to HITEC City. Host cancelled last minute and I need a refund.',
+          },
+          deviceId: { type: 'string', example: '+919876543210' },
+        },
+      },
+      IssueTicket: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', format: 'uuid', example: 'c4b1e8a2-7f3d-4c11-9b5a-2e8d910f3a12' },
+          ticketCode: { type: 'string', example: 'RACE-482910' },
+          userId: { type: 'string', format: 'uuid', example: '8a5ecf46-9466-4728-b837-ddc31ed7c4d6' },
+          issueType: { type: 'string', example: 'Ride Booking / Cancellation' },
+          urgency: { type: 'string', example: 'High — Impacts an upcoming or recent ride' },
+          briefDescription: {
+            type: 'string',
+            example: 'Driver cancelled ride 5 minutes before pickup',
+          },
+          details: {
+            type: 'string',
+            example: 'Booked ride ride-101 for 08:45 AM from Gachibowli to HITEC City...',
+          },
+          status: { type: 'string', example: 'OPEN' },
+          createdAt: { type: 'string', format: 'date-time', example: '2026-11-26T01:30:00.000Z' },
+        },
+      },
+      ReportIssueResponse: {
+        type: 'object',
+        properties: {
+          message: { type: 'string', example: 'Issue report submitted successfully' },
+          ticket: { $ref: '#/components/schemas/IssueTicket' },
+        },
+      },
+      TicketSummary: {
+        type: 'object',
+        properties: {
+          id: { type: 'string', format: 'uuid', example: 'c4b1e8a2-7f3d-4c11-9b5a-2e8d910f3a12' },
+          ticketCode: { type: 'string', example: 'RACE-482910' },
+          issueType: { type: 'string', example: 'Ride Booking / Cancellation' },
+          urgency: { type: 'string', example: 'High — Impacts an upcoming or recent ride' },
+          briefDescription: {
+            type: 'string',
+            example: 'Driver cancelled ride 5 minutes before pickup',
+          },
+          status: { type: 'string', example: 'OPEN' },
+          createdAt: { type: 'string', format: 'date-time', example: '2026-11-26T01:30:00.000Z' },
+        },
+      },
+      MyTicketsResponse: {
+        type: 'object',
+        properties: {
+          tickets: {
+            type: 'array',
+            items: { $ref: '#/components/schemas/TicketSummary' },
+          },
         },
       },
       ErrorResponse: {
@@ -259,6 +329,72 @@ export const swaggerSpec = {
           },
           '400': {
             description: 'Validation error',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/api/support/report-issue': {
+      post: {
+        tags: ['Support'],
+        summary: 'Submit a new issue report',
+        security: [{ bearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/ReportIssueRequest' },
+            },
+          },
+        },
+        responses: {
+          '201': {
+            description: 'Issue report submitted successfully',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ReportIssueResponse' },
+              },
+            },
+          },
+          '400': {
+            description: 'Validation error',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' },
+              },
+            },
+          },
+          '401': {
+            description: 'Unauthorized. Valid access token is required.',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/ErrorResponse' },
+              },
+            },
+          },
+        },
+      },
+    },
+    '/api/support/my-tickets': {
+      get: {
+        tags: ['Support'],
+        summary: "Fetch authenticated user's support tickets",
+        security: [{ bearerAuth: [] }],
+        responses: {
+          '200': {
+            description: 'List of user support tickets',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/MyTicketsResponse' },
+              },
+            },
+          },
+          '401': {
+            description: 'Unauthorized. Valid access token is required.',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/ErrorResponse' },
