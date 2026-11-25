@@ -4,7 +4,7 @@ export const swaggerSpec = {
     title: 'MyApp Backend REST API',
     version: '1.0.0',
     description:
-      'REST API for MyApp built with Node.js, Express, Prisma, and PostgreSQL. Supports user signup, login, refresh token rotation, and Expo push notification device registration.',
+      'REST API for MyApp built with Node.js, Express, Prisma, and PostgreSQL. Supports user signup, login, refresh token rotation, and device registration.',
   },
   servers: [
     {
@@ -15,7 +15,7 @@ export const swaggerSpec = {
   tags: [
     { name: 'Health', description: 'Service and database health checks' },
     { name: 'Auth', description: 'User registration, login, and token refresh' },
-    { name: 'Device', description: 'Device ID and Expo push token registration' },
+    { name: 'Device', description: 'Device ID registration' },
   ],
   components: {
     securitySchemes: {
@@ -69,10 +69,9 @@ export const swaggerSpec = {
       },
       DeviceRequest: {
         type: 'object',
-        required: ['deviceID', 'expoToken'],
+        required: ['deviceID'],
         properties: {
           deviceID: { type: 'string', example: 'device-ios-9f8c2a1b' },
-          expoToken: { type: 'string', example: 'ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]' },
         },
       },
       DeviceResponse: {
@@ -80,7 +79,6 @@ export const swaggerSpec = {
         properties: {
           message: { type: 'string', example: 'Successfully saved' },
           deviceID: { type: 'string', example: 'device-ios-9f8c2a1b' },
-          expoToken: { type: 'string', example: 'ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]' },
         },
       },
       ErrorResponse: {
@@ -240,7 +238,7 @@ export const swaggerSpec = {
     '/api/deviceId': {
       post: {
         tags: ['Device'],
-        summary: 'Save or update deviceID and Expo push notification token',
+        summary: 'Save or update deviceID',
         security: [{}, { bearerAuth: [] }],
         requestBody: {
           required: true,
@@ -252,7 +250,7 @@ export const swaggerSpec = {
         },
         responses: {
           '200': {
-            description: 'Device token saved',
+            description: 'Device saved',
             content: {
               'application/json': {
                 schema: { $ref: '#/components/schemas/DeviceResponse' },

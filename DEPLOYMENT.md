@@ -165,13 +165,12 @@ curl -X POST https://my-app-backend-4lw0.onrender.com/api/auth/login \
   }'
 ```
 
-### 5. Test Device & Push Token API
+### 5. Test Device API
 ```bash
 curl -X POST https://my-app-backend-4lw0.onrender.com/api/deviceId \
   -H "Content-Type: application/json" \
   -d '{
-    "deviceID": "device-mobile-01",
-    "expoToken": "ExponentPushToken[xxxxxxxxxxxxxx]"
+    "deviceID": "device-mobile-01"
   }'
 ```
 

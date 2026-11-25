@@ -37,7 +37,6 @@ model RefreshToken {
 model Device {
   id        String   @id @default(uuid())
   deviceId  String   @unique @map("device_id")
-  expoToken String?  @map("expo_token")
   userId    String?  @map("user_id")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

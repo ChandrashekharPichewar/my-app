@@ -2,7 +2,7 @@
 
 REST API backend built with **Node.js**, **Express**, **TypeScript**, **Prisma ORM**, and **PostgreSQL**.
 
-Includes Swagger UI documentation, JWT access/refresh token rotation, device registration for Expo push notifications, and rate limiting.
+Includes Swagger UI documentation, JWT access/refresh token rotation, device registration, and rate limiting.
 
 ---
 
@@ -13,7 +13,7 @@ Includes Swagger UI documentation, JWT access/refresh token rotation, device reg
   - `POST /api/auth/login`: User login with `username` (email or firstname), `password`, and `deviceId`.
   - `POST /api/auth/refresh`: Refresh token rotation.
 - **Device Management**:
-  - `POST /api/deviceId`: Registers or updates `deviceID` and `expoToken` for push notifications.
+  - `POST /api/deviceId`: Registers or updates `deviceID`.
 - **Documentation**:
   - OpenAPI 3.0 specification with Swagger UI served at `/api-docs` (and `/api-docs.json`).
 - **Security & Reliability**:
