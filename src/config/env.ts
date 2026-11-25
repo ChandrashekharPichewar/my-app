@@ -21,12 +21,14 @@ if (!parsed.success) {
   throw new Error('Invalid environment configuration');
 }
 
+const configuredCorsOrigins = parsed.data.CORS_ORIGIN.split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 export const env = {
   ...parsed.data,
   corsOrigins:
     parsed.data.CORS_ORIGIN === '*'
       ? '*'
-      : parsed.data.CORS_ORIGIN.split(',')
-          .map((origin) => origin.trim())
-          .filter(Boolean),
+      : Array.from(new Set([...configuredCorsOrigins, 'http://localhost:5173'])),
 };
